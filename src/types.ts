@@ -1,14 +1,33 @@
+export type LanguageId = "georgian" | "spanish";
+
+export type Language = {
+  id: LanguageId;
+  name: string;
+  flag: string;
+  description: string;
+};
+
 export type WordPart = {
-  georgian: string;
-  transliteration: string;
+  native: string;
+  transliteration?: string;
   meaning: string;
 };
 
+export type CategoryId = string;
+
 export type Flashcard = {
   id: string;
-  georgian: string;
-  transliteration: string;
+  category: CategoryId;
+  native: string;
+  transliteration?: string;
   english: string;
   description: string;
   breakdown?: WordPart[];
+};
+
+export type Category = {
+  id: CategoryId;
+  name: string;
+  emoji: string;
+  description: string;
 };
