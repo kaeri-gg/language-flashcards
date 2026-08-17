@@ -1,4 +1,32 @@
 @import "tailwindcss";
+@import "./components.css";
+
+html,
+body {
+  min-height: 100vh;
+}
+
+body {
+  background-color: #f5f3ff;
+  background-image:
+    radial-gradient(
+      circle at var(--flare-x1, 18%) var(--flare-y1, 22%),
+      rgba(158, 136, 255, 0.55) 0px,
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at var(--flare-x2, 82%) var(--flare-y2, 18%),
+      rgb(114 255 225 / 50%) 0px,
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at var(--flare-x3, 50%) var(--flare-y3, 88%),
+      rgb(253 141 141 / 45%) 0px,
+      transparent 55%
+    );
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
 
 @layer utilities {
   .perspective {

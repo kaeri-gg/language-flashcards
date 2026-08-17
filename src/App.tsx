@@ -37,6 +37,38 @@ export default function App() {
     );
   }, [archivedIds]);
 
+  useEffect(() => {
+    let raf = 0;
+    const update = () => {
+      const maxScroll = Math.max(
+        1,
+        document.documentElement.scrollHeight - window.innerHeight,
+      );
+      const p = Math.min(1, Math.max(0, window.scrollY / maxScroll));
+      // Each gradient drifts a bit along its own axis, but bounded so it never
+      // leaves the viewport frame.
+      const style = document.body.style;
+      style.setProperty("--flare-x1", `${18 + p * 20}%`);
+      style.setProperty("--flare-y1", `${22 + p * 30}%`);
+      style.setProperty("--flare-x2", `${82 - p * 20}%`);
+      style.setProperty("--flare-y2", `${18 + p * 40}%`);
+      style.setProperty("--flare-x3", `${50 + p * 10}%`);
+      style.setProperty("--flare-y3", `${88 - p * 40}%`);
+      raf = 0;
+    };
+    const onScroll = () => {
+      if (raf === 0) raf = window.requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", update, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", update);
+      if (raf !== 0) window.cancelAnimationFrame(raf);
+    };
+  }, []);
+
   const allCategoryCards = useMemo(() => {
     if (!languageId || !categoryId) return [];
     return cardsByLanguage[languageId].filter((c) => c.category === categoryId);
@@ -153,21 +185,21 @@ export default function App() {
       : "No cards archived yet. Tap the circle at the top of a card to mark it as learned.";
 
   return (
-    <div className="min-h-screen bg-slate-100 py-12 text-slate-900">
-      <div className="mx-auto flex max-w-xl flex-col items-center gap-8 px-4">
-        <div className="w-full">
+    <div className="main-container">
+      <div className="page-container">
+        <div className="page-brow">
           <button
             type="button"
             onClick={() => setCategoryId(null)}
-            className="text-sm text-slate-500 hover:text-slate-800"
+            className="btn-back"
           >
             ← Categories
           </button>
         </div>
 
-        <header className="w-full text-center">
-          <h1 className="text-2xl font-bold">{category.name}</h1>
-          <p className="mt-1 text-sm text-slate-500">
+        <header className="page-header">
+          <h1 className="page-title">{category.name}</h1>
+          <p className="card-count">
             {cardCount === 0
               ? viewMode === "active"
                 ? "No active cards"
@@ -185,25 +217,15 @@ export default function App() {
             onToggleArchive={() => toggleArchive(card.id)}
           />
         ) : (
-          <div className="flex min-h-96 w-full max-w-md items-center justify-center rounded-2xl bg-white p-8 text-center text-sm text-slate-500 shadow">
-            {emptyMessage}
-          </div>
+          <div className="card-wrapper">{emptyMessage}</div>
         )}
 
         {card && (
-          <div className="flex gap-3">
-            <button
-              type="button"
-              onClick={prev}
-              className="rounded-lg bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow hover:bg-slate-50"
-            >
+          <div className="card-container">
+            <button type="button" onClick={prev} className="btn-previous">
               ← Previous
             </button>
-            <button
-              type="button"
-              onClick={next}
-              className="rounded-lg bg-[#a996ff] px-4 py-2 text-sm font-medium text-white shadow hover:bg-[#8f7aff]"
-            >
+            <button type="button" onClick={next} className="btn-next">
               Next →
             </button>
           </div>
@@ -216,12 +238,12 @@ export default function App() {
             setIndex(0);
             setFlipped(false);
           }}
-          className="text-sm font-medium text-slate-600 underline underline-offset-4 hover:text-slate-900"
+          className="btn-archive"
         >
           Show {otherModeLabel} ({otherModeCount})
         </button>
 
-        <p className="text-xs text-slate-400">
+        <p className="info-instruction">
           ← / → to navigate · space or enter to flip
         </p>
       </div>
