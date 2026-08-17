@@ -23,6 +23,7 @@ export type Flashcard = {
   english: string;
   description: string;
   breakdown?: WordPart[];
+  unverified?: boolean;
 };
 
 export type Category = {

@@ -18,27 +18,21 @@ export function MainMenu({ language, onSelectCategory, onBack }: Props) {
   }));
 
   return (
-    <div className="min-h-screen bg-slate-100 py-12 text-slate-900">
-      <div className="mx-auto flex max-w-3xl flex-col gap-8 px-4">
-        <div className="w-full">
-          <button
-            type="button"
-            onClick={onBack}
-            className="text-sm text-slate-500 hover:text-slate-800"
-          >
+    <div className="main-container">
+      <div className="page-menu-container">
+        <div className="page-brow">
+          <button type="button" onClick={onBack} className="btn-back">
             ← Languages
           </button>
         </div>
 
-        <header className="text-center">
-          <div className="text-4xl">{languageMeta.flag}</div>
-          <h1 className="mt-2 text-3xl font-bold">{languageMeta.name} Flashcards</h1>
-          <p className="mt-2 text-sm text-slate-500">
-            Pick a category to start
-          </p>
+        <header className="page-menu-header">
+          <div className="page-menu-flag">{languageMeta.flag}</div>
+          <h1 className="page-menu-title">{languageMeta.name} Flashcards</h1>
+          <p className="page-menu-subtitle">Pick a category to start</p>
         </header>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="card-grid">
           {countsByCategory.map(({ category, count }) => {
             const disabled = count === 0;
             return (
@@ -47,26 +41,18 @@ export function MainMenu({ language, onSelectCategory, onBack }: Props) {
                 type="button"
                 disabled={disabled}
                 onClick={() => onSelectCategory(category.id)}
-                className={`flex items-center gap-4 rounded-2xl p-5 text-left shadow transition ${
-                  disabled
-                    ? "cursor-not-allowed bg-slate-200/60 text-slate-400"
-                    : "bg-white hover:-translate-y-0.5 hover:shadow-lg"
-                }`}
+                className="card-category"
               >
-                <div className="flex min-w-0 flex-1 flex-col gap-1">
-                  <div className="text-lg font-semibold">{category.name}</div>
-                  <div className="text-xs text-slate-500">
+                <div className="card-category-info">
+                  <div className="card-category-name">{category.name}</div>
+                  <div className="card-category-description">
                     {category.description}
                   </div>
-                  <div
-                    className={`pt-1 text-xs font-medium ${
-                      disabled ? "text-slate-400" : "text-[#a996ff]"
-                    }`}
-                  >
+                  <div className="card-category-count">
                     {disabled ? "Coming soon" : `${count} card${count === 1 ? "" : "s"}`}
                   </div>
                 </div>
-                <div className="shrink-0 text-4xl">{category.emoji}</div>
+                <div className="card-category-emoji">{category.emoji}</div>
               </button>
             );
           })}
