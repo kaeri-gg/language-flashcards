@@ -1,6 +1,6 @@
 # language-flashcards
 
-Flashcards for learning a new language. Currently ships Spanish and Georgian decks.
+My flashcards for learning a new language. Currently ships Spanish and Georgian decks.
 
 Live: https://kaeri-gg.github.io/language-flashcards/
 
